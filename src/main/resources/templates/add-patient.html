@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Patient - Care Connect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #e9f7ef, #f0f4f1);
+            font-family: 'Arial', sans-serif;
+        }
+        .header {
+            background-color: #28a745;
+            padding: 20px;
+            color: white;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+        .clinic-title {
+            font-size: 24px;
+            margin: 0;
+        }
+        .breadcrumb {
+            background: transparent;
+            margin-bottom: 0;
+        }
+        .container {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #28a745;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #28a745;
+            color: white;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-align: center;
+        }
+        .form-section {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .form-section .form-group {
+            flex: 1 1 45%;
+        }
+        .form-section .full-width {
+            flex: 1 1 100%;
+        }
+        .btn-submit {
+            background-color: #28a745;
+            color: white;
+            border-radius: 25px;
+            font-weight: bold;
+            padding: 12px 25px;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn-submit:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+        }
+        label {
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+        @media (max-width: 576px) {
+            .form-section .form-group {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="fragments/header.html"></div>
+
+    <div class="container">
+        <h1>Add Patient</h1>
+        
+        <div class="card">
+            <div class="card-header">Patient Information</div>
+            <div class="card-body">
+                <form th:action="@{/addPatient}" th:object="${patient}" method="post">
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label for="name">Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                            <div class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateOfBirth">Date of Birth <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="dateOfBirth" th:field="*{dateOfBirth}" required>
+                            <div class="error-message" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}">Date of Birth error</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender <span class="text-danger">*</span></label>
+                            <select class="form-control" id="gender" th:field="*{gender}" required>
+                                <option value="">Select</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <div class="error-message" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}">Gender error</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone <span class="text-danger">*</span></label>
+                            <input type="tel" class="form-control" id="phone" th:field="*{phone}" required>
+                            <div class="error-message" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Phone error</div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="address">Address</label>
+                            <input type="text" class="form-control" id="address" th:field="*{address}">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" th:field="*{email}">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="medicalHistory">Medical History</label>
+                            <textarea class="form-control" id="medicalHistory" th:field="*{medicalHistory}" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="allergies">Allergies</label>
+                            <textarea class="form-control" id="allergies" th:field="*{allergies}" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="emergencyContact">Emergency Contact</label>
+                            <input type="tel" class="form-control" id="emergencyContact" th:field="*{emergencyContact}">
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-submit">Save Patient</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

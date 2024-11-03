@@ -1,0 +1,33 @@
+<!-- src/main/resources/templates/fragments/header.html -->
+<head>
+    <!-- Google Font for a Stylish Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+</head>
+<div class="header d-flex justify-content-between align-items-center p-3" style="background: linear-gradient(135deg, #43a047, #66bb6a); color: white; font-family: 'Poppins', sans-serif; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); border-radius: 8px;">
+    <!-- Home Dashboard Button on the Left -->
+    <div class="d-flex align-items-center">
+        <!-- Icon for Clinic Logo -->
+        <i class="fas fa-stethoscope fa-2x mr-2" style="color: #fff; font-size: 1.8rem;"></i>
+        
+        <!-- Clinic Title with Stylish Font -->
+        <h2 class="clinic-title mr-3" style="font-weight: 600; margin: 0; color: #fff;">Deshmukh Clinic</h2>
+
+        <!-- Home Button with Updated Icon and Rounded Style -->
+        <a href="/dashboard" class="btn btn-outline-light btn-sm mr-2" style="border-radius: 25px; font-size: 0.9rem; padding: 5px 15px;">
+            <i class="fas fa-home mr-1" style="color: #fff;"></i> Dashboard
+        </a>
+    </div>
+
+    <!-- User Info on the Right -->
+    <div class="user-info d-flex align-items-center">
+        <!-- Username Display with Bold Style -->
+        <span th:text="${username}" class="mr-3" style="font-weight: 500; color: #e0f2f1;">Username</span>
+        
+        <!-- Logout Button with Rounded Style and Modern Look -->
+        <form action="/logout" method="post">
+            <button type="submit" class="btn btn-danger btn-sm" style="border-radius: 25px; font-size: 0.9rem; padding: 5px 15px;">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </form>
+    </div>
+</div>

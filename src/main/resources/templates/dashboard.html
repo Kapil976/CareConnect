@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor's Dashboard - Care Connect</title>
+
+    <!-- Google Font for better typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Bootstrap CSS for layout -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background-color: #f7f9fc;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            padding: 15px 20px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .clinic-title {
+            font-size: 26px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .clinic-title i {
+            margin-right: 10px;
+        }
+
+        h1 {
+            color: #4caf50;
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            background-color: #4caf50;
+            color: white;
+            font-weight: 500;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon {
+            font-size: 36px;
+        }
+
+        .icon-bg {
+            background-color: rgba(76, 175, 80, 0.1);
+            padding: 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+
+        .card-body p {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .btn-custom {
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .btn-success:hover,
+        .btn-info:hover,
+        .btn-warning:hover,
+        .btn-primary:hover,
+        .btn-secondary:hover,
+        .btn-danger:hover {
+            opacity: 0.9;
+        }
+
+        /* Responsive Styling */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        .footer {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            font-size: 0.9rem;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="fragments/header.html"></div>
+
+    <div class="container mt-4">
+        <h1>Doctor's Dashboard</h1>
+
+        <div class="row">
+            <!-- Add Patient Card -->
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="icon-bg">
+                            <i class="fas fa-user-plus icon"></i>
+                        </div>
+                        <h5 class="mb-0">Add Patient</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <p>Add new patient details to your records.</p>
+                        <a href="/addPatient" class="btn btn-success btn-custom">Add Patient</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View Patients Card -->
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="icon-bg">
+                            <i class="fas fa-users icon"></i>
+                        </div>
+                        <h5 class="mb-0">View Patients</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <p>Access and manage patient records easily.</p>
+                        <a href="/patients" class="btn btn-info btn-custom">View Patients</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suggestions Card -->
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="icon-bg">
+                            <i class="fas fa-prescription icon"></i>
+                        </div>
+                        <h5 class="mb-0">Patient Prescription</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <p>Create and download prescriptions for patients.</p>
+                        <button class="btn btn-primary btn-custom" data-toggle="modal" data-target="#prescriptionModal">
+                            Create Prescription
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Appointments Card -->
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="icon-bg">
+                            <i class="fas fa-calendar-check icon"></i>
+                        </div>
+                        <h5 class="mb-0">Appointments</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <p>Manage and schedule patient appointments.</p>
+                        <button class="btn btn-primary btn-custom" data-toggle="modal"
+                            data-target="#appointmentsModal">View Appointments</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Card -->
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="icon-bg">
+                            <i class="fas fa-chart-pie icon"></i>
+                        </div>
+                        <h5 class="mb-0">Reports & Analytics</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <p>View statistics and analytics for patient management.</p>
+                        <a href="/reports" class="btn btn-secondary btn-custom">View Reports</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="icon-bg">
+                            <i class="fas fa-bell icon"></i>
+                        </div>
+                        <h5 class="mb-0">Notifications</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <p>Stay updated with important alerts and reminders.</p>
+                        <button class="btn btn-danger btn-custom" data-toggle="modal"
+                            data-target="#notificationsModal">View Notifications</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modals for "Feature In Progress" Messages -->
+        <!-- Suggestions Modal -->
+        <div class="modal fade" id="suggestionsModal" tabindex="-1" aria-labelledby="suggestionsModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="suggestionsModalLabel">Feature In Progress</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        The Patient Suggestions feature is currently under development. Stay tuned!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appointments Modal -->
+        <div class="modal fade" id="appointmentsModal" tabindex="-1" aria-labelledby="appointmentsModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="appointmentsModalLabel">Feature In Progress</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        The Appointments feature is currently under development. Stay tuned!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications Modal -->
+        <div class="modal fade" id="notificationsModal" tabindex="-1" aria-labelledby="notificationsModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="notificationsModalLabel">Feature In Progress</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        The Notifications feature is currently under development. Stay tuned!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="prescriptionModal" tabindex="-1" aria-labelledby="prescriptionModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="prescriptionModalLabel">Create Prescription</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="prescriptionForm">
+                            <input type="hidden" id="patientId" name="patientId" value="<!-- Patient ID -->">
+                            <div class="form-group">
+                                <label for="medication">Medication</label>
+                                <input type="text" id="medication" name="medication" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="dosage">Dosage</label>
+                                <input type="text" id="dosage" name="dosage" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prescriptionDate">Prescription Date</label>
+                                <input type="date" id="prescriptionDate" name="prescriptionDate" class="form-control"
+                                    required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="createAndDownloadPrescription()">Save &
+                            Download</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer.html" class="footer"></footer>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

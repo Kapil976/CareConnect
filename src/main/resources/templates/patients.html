@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Details - Care Connect</title>
+    
+    <!-- Google Font for better typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <!-- Bootstrap CSS for layout -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <style>
+        /* General Styling */
+        body {
+            background-color: #f7f9fc;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        /* Header Styling */
+        .header {
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            padding: 15px 20px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .clinic-title {
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        /* Heading */
+        h1 {
+            color: #4caf50;
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        /* Button Styling */
+        .btn-add {
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            color: white;
+            font-weight: 500;
+            border-radius: 25px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+        .btn-add:hover {
+            background: linear-gradient(135deg, #45a049, #388e3c);
+        }
+        
+        /* Table Styling */
+        .table {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        .table th {
+            background-color: #e8f5e9;
+            font-weight: 500;
+        }
+        .table-hover tbody tr:hover {
+            background-color: #d9fdd9;
+            transition: background-color 0.3s;
+        }
+        
+        /* Card Styling */
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+        .card-header {
+            background-color: #4caf50;
+            color: white;
+            font-weight: 500;
+        }
+        
+        /* Search Bar */
+        .search-bar {
+            width: 100%;
+            max-width: 600px;
+            padding: 10px;
+            border-radius: 25px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s;
+        }
+        .search-bar:focus {
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            border-color: #4caf50;
+        }
+        
+        /* Modal Styling */
+        .modal-header {
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            color: white;
+            font-weight: 600;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .modal-content {
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+        }
+        
+        /* Responsive Styling */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            .btn-add {
+                width: 100%;
+            }
+            .search-bar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="fragments/header.html"></div>
+    
+    <div class="container">
+        <h1>Patient Details</h1>
+        
+        <!-- Add Patient Button
+        <div class="text-right mb-3">
+            <a href="/addPatient" class="btn btn-add">
+                <i class="fas fa-plus"></i> Add Patient
+            </a>
+        </div> -->
+        
+        <!-- Search Bar -->
+        <div class="search-container mb-4">
+            <input type="text" id="searchInput" class="search-bar" placeholder="Search patients...">
+        </div>
+
+        <!-- Patient List Table -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">List of Patients</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Date of Birth</th>
+                            <th>Gender</th>
+                            <th>Address</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Medical History</th>
+                            <th>Allergies</th>
+                            <th>Emergency Contact</th>
+                            <th>Date of Last Visit</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="patientList">
+                        <tr th:each="patient : ${patients}">
+                            <td th:text="${patient.name}"></td>
+                            <td th:text="${patient.dateOfBirth}"></td>
+                            <td th:text="${patient.gender}"></td>
+                            <td th:text="${patient.address}"></td>
+                            <td th:text="${patient.phone}"></td>
+                            <td th:text="${patient.email}"></td>
+                            <td th:text="${patient.medicalHistory}"></td>
+                            <td th:text="${patient.allergies}"></td>
+                            <td th:text="${patient.emergencyContact}"></td>
+                            <td th:text="${patient.lastVisit}"></td>
+                            <td>
+                                <button class="btn btn-outline-info btn-sm rounded-circle edit-btn" th:data-id="${patient.id}" data-toggle="modal" data-target="#editPatientModal">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Patient Modal Popup -->
+    <div class="modal fade" id="editPatientModal" tabindex="-1" role="dialog" aria-labelledby="editPatientModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPatientModalLabel">Edit Patient Details</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editPatientForm" action="/editPatient" method="post">
+                        <input type="hidden" id="patientId" name="id" />
+
+                        <!-- Name -->
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+
+                        <!-- Medical History -->
+                        <div class="form-group">
+                            <label for="medicalHistory">Medical History</label>
+                            <textarea class="form-control" id="medicalHistory" name="medicalHistory" rows="3"></textarea>
+                        </div>
+
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-success">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const filter = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#patientList tr');
+
+            rows.forEach(row => {
+                const cells = Array.from(row.getElementsByTagName('td'));
+                const match = cells.some(cell => cell.textContent.toLowerCase().includes(filter));
+                row.style.display = match ? '' : 'none';
+            });
+        });
+    </script>
+
+    <script>
+        // Event delegation for edit buttons
+        document.addEventListener('DOMContentLoaded', function () {
+            const patientList = document.getElementById('patientList');
+            patientList.addEventListener('click', function (event) {
+                if (event.target.closest('.edit-btn')) {
+                    const patientId = event.target.closest('.edit-btn').getAttribute('data-id');
+                    loadPatientData(patientId);
+                }
+            });
+        });
+
+        function loadPatientData(patientId) {
+            fetch(`/getPatientData?id=${patientId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('patientId').value = data.id;
+                    document.getElementById('name').value = data.name;
+                    document.getElementById('medicalHistory').value = data.medicalHistory;
+                })
+                .catch(error => console.error('Error fetching patient data:', error));
+        }
+    </script>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

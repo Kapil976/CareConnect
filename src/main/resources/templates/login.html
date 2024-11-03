@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Care Connect - Login</title>
+
+    <!-- Google Fonts for Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #e8f5e9, #4caf50);
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeIn 0.5s;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .login-title {
+            text-align: center;
+            color: #4caf50;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        .login-title h1 {
+            font-size: 32px;
+            color: #4caf50;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .login-title i {
+            color: #4caf50;
+            margin-right: 10px;
+            font-size: 40px;
+        }
+
+        .login-subtitle {
+            color: #555;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #4caf50;
+            transition: border 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #388e3c;
+            box-shadow: 0 0 5px rgba(56, 142, 60, 0.5);
+            outline: none;
+        }
+
+        .login-button {
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            color: white;
+            font-weight: bold;
+            border-radius: 8px;
+            padding: 12px;
+            transition: background 0.3s ease, transform 0.3s ease;
+            border: none;
+            font-size: 16px;
+        }
+
+        .login-button:hover {
+            background: linear-gradient(135deg, #45a049, #388e3c);
+            transform: translateY(-2px);
+        }
+
+        .text-center a {
+            color: #4caf50;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .text-center a:hover {
+            color: #388e3c;
+            text-decoration: underline;
+        }
+
+        /* Modal styling */
+        .modal-content {
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+        }
+
+        .modal-header {
+            background-color: #66bb6a;
+            color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .modal-body {
+            text-align: center;
+        }
+
+        .modal-footer {
+            justify-content: center;
+        }
+
+        .modal-footer .btn-secondary {
+            background-color: #4caf50;
+            color: white;
+            transition: background 0.3s ease;
+        }
+
+        .modal-footer .btn-secondary:hover {
+            background-color: #388e3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+
+       
+        <div class="login-title">
+            <i class="fas fa-user-md"></i>
+            <h1>Deshmukh's Clinic</h1>
+        </div>
+        <p class="login-subtitle">Welcome back! Please log in to your account</p>
+         <!-- Error Alert at the Top -->
+         <div th:if="${param.error}" id="errorAlert" class="alert alert-danger alert-dismissible fade show" role="alert">
+            Invalid username or password.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form action="#" th:action="@{/login}" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+
+            <button type="submit" class="btn login-button btn-block">Login</button>
+
+            <div class="text-center mt-3">
+                <a href="#" th:href="@{/register}">Don't have an account? Register here</a>
+            </div>
+        </form>
+        
+    </div>
+
+    <!-- Modal for Login Error -->
+   
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Check if the error alert is visible
+            if ($('#errorAlert').length) {
+                // Set a timeout to hide the alert after 5 seconds (5000 milliseconds)
+                setTimeout(function() {
+                    $('#errorAlert').alert('close'); // Use Bootstrap's alert close method
+                }, 4000);
+            }
+        });
+    </script>
+</body>
+</html>
